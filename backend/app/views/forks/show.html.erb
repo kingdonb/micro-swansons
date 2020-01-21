@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @fork.position %>
+</p>
+
+<p>
+  <strong>Clean:</strong>
+  <%= @fork.clean %>
+</p>
+
+<p>
+  <strong>Table:</strong>
+  <%= @fork.table_id %>
+</p>
+
+<%= link_to 'Edit', edit_fork_path(@fork) %> |
+<%= link_to 'Back', forks_path %>
