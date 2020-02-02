@@ -4,13 +4,13 @@ require 'bundler/setup' # Set up gems listed in the Gemfile.
 require "rails"
 # Pick the frameworks you want:
 require "active_model/railtie"
-Bundler.require(*Rails.groups)
-module Backend
-  class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
-  end
-end
+#Bundler.require(*Rails.groups)
+#module Backend
+#  class Application < Rails::Application
+#    # Initialize configuration defaults for originally generated Rails version.
+#    config.load_defaults 6.0
+#  end
+#end
 #
 
 class Handler
