@@ -1,6 +1,5 @@
 #require File.expand_path('../config/environment', __FILE__)
 
-require 'bundler/setup' # Set up gems listed in the Gemfile.
 require "rails"
 # Pick the frameworks you want:
 require "active_model/railtie"
