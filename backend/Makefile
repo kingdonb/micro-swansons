@@ -4,4 +4,4 @@ backend:
 tag:
 	docker tag kingdonb/manners:latest kingdonb/manners:0.1.0
 push:
-	docker push kingdonb/manners:latest kingdonb/manners:0.1.0
+	docker push kingdonb/manners:0.1.0
