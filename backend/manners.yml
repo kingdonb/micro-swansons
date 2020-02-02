@@ -1,0 +1,10 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: https://faas-gw.team.hephy.rocks
+functions:
+  manners:
+    lang: ruby-http
+    handler: ./manners
+    image: kingdonb/manners:latest
+
