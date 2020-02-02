@@ -1,10 +1,10 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://127.0.0.1:8080
+  gateway: https://faas-gw.team.hephy.rocks
 functions:
   manners:
     lang: ruby-http
     handler: ./manners
-    image: manners:latest
+    image: kingdonb/manners:latest
 
