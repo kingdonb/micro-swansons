@@ -2,4 +2,4 @@
 
 <%= render 'form', fork: @fork %>
 
-<%= link_to 'Back', forks_path %>
+<%= link_to 'Back', table_forks_path(table_id: @fork.table) %>

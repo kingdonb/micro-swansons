@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe "forks/edit", type: :view do
+  let(:table) { Table.create! }
   before(:each) do
+    @table = assign(:table, table)
     @fork = assign(:fork, Fork.create!(
       :position => 1,
       :clean => false,
-      :table => nil
+      :table => table
     ))
   end
 

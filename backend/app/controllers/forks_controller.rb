@@ -1,10 +1,11 @@
 class ForksController < ApplicationController
   before_action :set_fork, only: [:show, :edit, :update, :destroy]
+  before_action :set_table, only: [:index, :new, :edit]
 
   # GET /forks
   # GET /forks.json
   def index
-    @forks = Fork.all
+    @forks = Fork.where(table_id: params[:table_id])
   end
 
   # GET /forks/1
@@ -14,7 +15,7 @@ class ForksController < ApplicationController
 
   # GET /forks/new
   def new
-    @fork = Fork.new
+    @fork = Fork.new(table_id: @table.id)
   end
 
   # GET /forks/1/edit
@@ -65,6 +66,14 @@ class ForksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_fork
       @fork = Fork.find(params[:id])
+    end
+
+    def set_table
+      if params[:table_id].present?
+        @table = Table.find(params[:table_id])
+      else
+        @table = Table.find(@fork.table_id)
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
