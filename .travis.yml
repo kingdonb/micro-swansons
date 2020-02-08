@@ -4,6 +4,9 @@ rvm:
 services:
   - postgresql
 before_script:
-  - psql -c "create database backend_test; create role microswansons with createdb login password 'secret_goes_here'; ALTER DATABASE backend_development OWNER TO microswansons;" -U postgres
+  - psql -c "create database backend_test;" -U postgres
+  - psql -c "create role microswansons with createdb login password 'secret_goes_here';" -U postgres
+  - psql -c "ALTER DATABASE backend_development OWNER TO microswansons;" -U postgres
+script: sh -c 'cd backend && bundle exec rake db:drop db:create db:migrate test'
 env:
   - DB_PASS=secret_goes_here
