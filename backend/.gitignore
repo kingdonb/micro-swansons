@@ -36,3 +36,4 @@ yarn-debug.log*
 template
 build
 rspec.xml
+features/reports/results.json
