@@ -1,5 +1,7 @@
 language: ruby
-cache: bundler
+cache:
+  directories:
+    - $HOME/.rvm/gems/ruby-2.7.0@global/
 rvm:
   - 2.7.0
 services:
