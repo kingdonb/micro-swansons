@@ -41,9 +41,22 @@ Boilerplate from `rails new`:
 
 * Configuration
 
+    # .env.local
+    RAILS_MAX_THREADS=1
+    DB_PASS="secret_goes_here"
+
 * Database creation
 
+    $ psql postgres
+
+    CREATE DATABASE backend_development;
+    create role microswansons with createdb login password 'secret_goes_here';
+    ALTER DATABASE backend_development OWNER TO microswansons;
+
 * Database initialization
+
+    $ rails db:migrate
+    $ rails db:seed
 
 * How to run the test suite
 
