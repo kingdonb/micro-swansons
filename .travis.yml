@@ -1,7 +1,7 @@
 language: ruby
 cache:
   directories:
-    - $HOME/.rvm/gems/ruby-2.7.0@global/
+    - $HOME/.rvm/rubies/ruby-2.7.0/lib/ruby/gems/2.7.0
 rvm:
   - 2.7.0
 services:
