@@ -12,6 +12,7 @@ before_script:
   - psql -c "ALTER DATABASE backend_test OWNER TO microswansons;" -U postgres
   - cd backend
   - bundle exec rake db:migrate
+  - nvm install 10
   - bundle exec rake assets:precompile
 script: bundle exec rake spec
 env:

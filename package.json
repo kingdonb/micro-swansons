@@ -1,5 +1,5 @@
 {
-  "engines" : { "node" : ">=8.16.0" },
+  "engines" : { "node" : ">=10" },
   "name": "backend",
   "private": true,
   "dependencies": {
