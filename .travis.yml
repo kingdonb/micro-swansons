@@ -8,7 +8,9 @@ before_script:
   - psql -c "create database backend_test;" -U postgres
   - psql -c "create role microswansons with createdb login password 'secret_goes_here';" -U postgres
   - psql -c "ALTER DATABASE backend_test OWNER TO microswansons;" -U postgres
-  - 'cd backend && bundle install'
-script: sh -c 'bundle exec rake db:drop db:create db:migrate spec'
+  - cd backend
+  - bundle exec rake db:migrate
+  - bundle exec rake assets:precompile
+script: bundle exec rake spec
 env:
   - DB_PASS=secret_goes_here
