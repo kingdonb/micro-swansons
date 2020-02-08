@@ -1,4 +1,11 @@
-<%= form_with(model: fork, local: true) do |form| %>
+<%
+    fork_url = if @fork.persisted?
+                 fork_path(@fork)
+               else
+                 table_forks_path(table_id: @table.id)
+               end
+             %>
+<%= form_with(model: fork, local: true, url: fork_url) do |form| %>
   <% if fork.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(fork.errors.count, "error") %> prohibited this fork from being saved:</h2>
