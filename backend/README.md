@@ -35,9 +35,9 @@ A web frontend is meant to be exposed which can reflect the status of the forks,
 
 Boilerplate from `rails new`:
 
-* Ruby version
+* Ruby version - 2.7.0
 
-* System dependencies
+* System dependencies - fetch using `bundle install`
 
 * Configuration
 
@@ -59,6 +59,10 @@ Boilerplate from `rails new`:
     $ rails db:seed
 
 * How to run the test suite
+
+    $ nvm install 10
+    $ rails assets:precompile
+    $ bundle exec rake spec
 
 * Services (job queues, cache servers, search engines, etc.)
 
