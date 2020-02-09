@@ -1,5 +1,12 @@
 class TablesController < ApplicationController
-  before_action :set_table, only: [:show, :edit, :update, :destroy]
+  before_action :set_table, only: [
+    :show, :edit, :update, :destroy,
+    :sit,
+  ]
+
+  def sit
+    @table.decrement_seats!
+  end
 
   # GET /tables
   # GET /tables.json
