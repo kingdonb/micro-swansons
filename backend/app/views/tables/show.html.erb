@@ -10,5 +10,8 @@
   <%= @table.seats %>
 </p>
 
+<%= link_to 'Sit', sit_table_path(id: @table.id) %> |
+<%= link_to 'Eat', eat_table_path(id: @table.id) %> |
+<%= link_to 'Forks', table_forks_path(table_id: @table.id) %> |
 <%= link_to 'Edit', edit_table_path(@table) %> |
 <%= link_to 'Back', tables_path %>
