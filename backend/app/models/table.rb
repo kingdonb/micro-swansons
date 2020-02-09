@@ -60,7 +60,13 @@ class Table < ApplicationRecord
     end
   end
 
+  def verify_all_seated?
+    seats == 0
+  end
+
   def client_has_both_forks?(client_ip:)
+    raise Table::ErrWaitForEveryone unless verify_all_seated?
+
     left_fork = find_fork_to_left_of(client_ip: client_ip)
     right_fork = find_fork_to_right_of(client_ip: client_ip)
 
@@ -109,7 +115,7 @@ class Table < ApplicationRecord
   end
 
   def find_fork_to_right_of(client_ip:)
-    if seats == 0
+    if verify_all_seated?
       num_seats = clients.length
       forks.
         find_by!(

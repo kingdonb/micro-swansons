@@ -12,8 +12,10 @@
 
 <p>
   <%= link_to 'Sit', sit_table_path(id: @table.id) %> |
-  <%= link_to 'Pick Up Left Fork', pick_up_fork_path(id: @left_fork.id) %> |
-  <%= link_to 'Pick Up Right Fork', pick_up_fork_path(id: @right_fork.id) %> |
+  <% if @table.verify_all_seated? %>
+    <%= link_to 'Pick Up Left Fork', pick_up_fork_path(id: @left_fork.id) %> |
+    <%= link_to 'Pick Up Right Fork', pick_up_fork_path(id: @right_fork.id) %> |
+  <% end %>
   <%= link_to 'Eat', eat_table_path(id: @table.id) %>
 </p>
 

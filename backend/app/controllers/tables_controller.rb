@@ -109,8 +109,10 @@ class TablesController < ApplicationController
 
   private
     def set_left_and_right
-      @left_fork = @table.what_fork_is_left_of(client_ip: my_client_ip)
-      @right_fork = @table.what_fork_is_right_of(client_ip: my_client_ip)
+      if @table.verify_all_seated?
+        @left_fork = @table.what_fork_is_left_of(client_ip: my_client_ip)
+        @right_fork = @table.what_fork_is_right_of(client_ip: my_client_ip)
+      end
     end
 
     # Use callbacks to share common setup or constraints between actions.
