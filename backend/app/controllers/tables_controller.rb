@@ -5,9 +5,13 @@ class TablesController < ApplicationController
   ]
 
   before_action :get_client_info, only: [
-    :sit, :eat, :clear,
+    :sit, :eat, :clear, :show,
     :my_left_fork, :my_right_fork,
     :left_neighbor, :right_neighbor,
+  ]
+
+  before_action :set_left_and_right, only: [
+    :show, :my_left_fork, :my_right_fork,
   ]
 
   include ClientInfoConcern
@@ -17,11 +21,9 @@ class TablesController < ApplicationController
   end
 
   def my_left_fork
-    @table.what_fork_is_left_of(client_ip: my_client_ip)
   end
 
   def my_right_fork
-    @table.what_fork_is_right_of(client_ip: my_client_ip)
   end
 
   def left_neighbor
@@ -106,6 +108,11 @@ class TablesController < ApplicationController
   end
 
   private
+    def set_left_and_right
+      @left_fork = @table.what_fork_is_left_of(client_ip: my_client_ip)
+      @right_fork = @table.what_fork_is_right_of(client_ip: my_client_ip)
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_table
       @table = Table.find(params[:id])

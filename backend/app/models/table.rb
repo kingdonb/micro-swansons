@@ -44,6 +44,14 @@ class Table < ApplicationRecord
     end
   end
 
+  def what_fork_is_left_of(client_ip:)
+    find_fork_to_left_of(client_ip: client_ip)
+  end
+
+  def what_fork_is_right_of(client_ip:)
+    find_fork_to_right_of(client_ip: client_ip)
+  end
+
   def has_fork?(client_ip:, fork:)
     if fork.owner_ip == client_ip
       true
@@ -103,7 +111,11 @@ class Table < ApplicationRecord
   def find_fork_to_right_of(client_ip:)
     if seats == 0
       num_seats = clients.length
-      position_to_my_right(client_ip: client_ip)
+      forks.
+        find_by!(
+          position: position_to_my_right(
+            client_ip: client_ip)
+      )
     else
       raise ErrWaitForEveryone
     end

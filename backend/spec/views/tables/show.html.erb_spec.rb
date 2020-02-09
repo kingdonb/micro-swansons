@@ -6,6 +6,12 @@ RSpec.describe "tables/show", type: :view do
       :name => "Name",
       :seats => 2
     ))
+    @left_fork = assign(:left_fork, Fork.create!(
+      table_id: @table.id, position: 1,
+    ))
+    @right_fork = assign(:right_fork, Fork.create!(
+      table_id: @table.id, position: 2
+    ))
   end
 
   it "renders attributes in <p>" do

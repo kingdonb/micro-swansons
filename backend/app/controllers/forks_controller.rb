@@ -1,6 +1,30 @@
 class ForksController < ApplicationController
-  before_action :set_fork, only: [:show, :edit, :update, :destroy]
+  class ForkError < StandardError; end
+  class TryAskingYourNeighbor < ForkError; end
+  before_action :set_fork, only: [
+    :show, :edit, :update, :destroy,
+    :pick_up,
+  ]
   before_action :set_table, only: [:index, :new, :edit, :destroy]
+
+  before_action :get_client_info, only: [
+    :pick_up,
+  ]
+
+  include ClientInfoConcern
+
+  def pick_up
+    @fork.with_lock do
+      if @fork.owner_ip.blank?
+        @fork.owner_ip = my_client_ip
+        @fork.save!
+      else
+        unless @fork.owner_ip == my_client_ip
+          raise ForksController::TryAskingYourNeighbor
+        end
+      end
+    end
+  end
 
   # GET /forks
   # GET /forks.json
