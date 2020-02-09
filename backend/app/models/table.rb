@@ -8,12 +8,9 @@ class Table < ApplicationRecord
   class AlreadySeated < RecoverableTableError; end
 
   include SeatSemaphore
+  include TableDecorator
 
   has_many :forks, dependent: :destroy
-
-  def table_deco
-    "#{name} (##{table_id})"
-  end
 
   # validate fork count > 1
 end

@@ -1,6 +1,6 @@
 module SeatSemaphore
   extend ActiveSupport::Concern
-  include Table
+  include TableDecorator
 
   def decrement_seats!(client_ip:)
     if seats > 0
