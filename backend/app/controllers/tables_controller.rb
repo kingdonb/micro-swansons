@@ -1,7 +1,7 @@
 class TablesController < ApplicationController
   before_action :set_table, only: [
     :show, :edit, :update, :destroy,
-    :sit,
+    :sit, :eat, :clear,
   ]
 
   before_action :get_client_info, only: [
