@@ -1,5 +1,51 @@
 class TablesController < ApplicationController
-  before_action :set_table, only: [:show, :edit, :update, :destroy]
+  before_action :set_table, only: [
+    :show, :edit, :update, :destroy,
+    :sit, :eat, :clear,
+  ]
+
+  before_action :get_client_info, only: [
+    :sit, :eat, :clear, :show,
+    :my_left_fork, :my_right_fork,
+    :left_neighbor, :right_neighbor,
+  ]
+
+  before_action :set_left_and_right, only: [
+    :show, :my_left_fork, :my_right_fork,
+  ]
+
+  include ClientInfoConcern
+
+  def sit
+    @table.be_seated!(client_ip: my_client_ip)
+  end
+
+  def my_left_fork
+  end
+
+  def my_right_fork
+  end
+
+  def left_neighbor
+    @table.who_is_left_of(client_ip: my_client_ip)
+  end
+
+  def right_neighbor
+    @table.who_is_right_of(client_ip: my_client_ip)
+  end
+
+  def clear
+    w_ip = waiter_ip
+    if my_client_ip == w_ip
+      @table.clear_table!
+    else
+      raise Table::NotAuthorizedAsWaiter, "The waiter is at '#{w_ip}', you are not the waiter."
+    end
+  end
+
+  def eat
+    @table.eat!(client_ip: my_client_ip)
+  end
 
   # GET /tables
   # GET /tables.json
@@ -62,6 +108,13 @@ class TablesController < ApplicationController
   end
 
   private
+    def set_left_and_right
+      if @table.verify_all_seated?
+        @left_fork = @table.what_fork_is_left_of(client_ip: my_client_ip)
+        @right_fork = @table.what_fork_is_right_of(client_ip: my_client_ip)
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_table
       @table = Table.find(params[:id])

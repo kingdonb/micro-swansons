@@ -28,15 +28,27 @@ RSpec.describe ForksController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # Fork. As you add validations to Fork, be sure to
   # adjust the attributes here as well.
+  let(:table) {
+    Table.create!
+  }
+
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      position: 1,
+      clean: false,
+      table_id: table.id,
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      position: 0,
+      clean: false,
+      table_id: table.id,
+    }
   }
 
-  let(:table_id) { Table.create!.id }
+  let(:table_id) { table.id }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -46,7 +58,7 @@ RSpec.describe ForksController, type: :controller do
   describe "GET #index" do
     it "returns a success response" do
       Fork.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      get :index, params: {table_id: table_id}, session: valid_session
       expect(response).to be_successful
     end
   end
@@ -78,19 +90,19 @@ RSpec.describe ForksController, type: :controller do
     context "with valid params" do
       it "creates a new Fork" do
         expect {
-          post :create, params: {fork: valid_attributes}, session: valid_session
+          post :create, params: {table_id: table_id, fork: valid_attributes}, session: valid_session
         }.to change(Fork, :count).by(1)
       end
 
       it "redirects to the created fork" do
-        post :create, params: {fork: valid_attributes}, session: valid_session
+        post :create, params: {table_id: table_id, fork: valid_attributes}, session: valid_session
         expect(response).to redirect_to(Fork.last)
       end
     end
 
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {fork: invalid_attributes}, session: valid_session
+        post :create, params: {table_id: table_id, fork: invalid_attributes}, session: valid_session
         expect(response).to be_successful
       end
     end
@@ -99,14 +111,19 @@ RSpec.describe ForksController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          position: 1,
+          clean: true,
+          table_id: table.id,
+        }
       }
 
       it "updates the requested fork" do
         fork = Fork.create! valid_attributes
+        expect(fork.clean?).to eq false
         put :update, params: {id: fork.to_param, fork: new_attributes}, session: valid_session
         fork.reload
-        skip("Add assertions for updated state")
+        expect(fork.clean?).to eq true
       end
 
       it "redirects to the fork" do
@@ -129,14 +146,14 @@ RSpec.describe ForksController, type: :controller do
     it "destroys the requested fork" do
       fork = Fork.create! valid_attributes
       expect {
-        delete :destroy, params: {id: fork.to_param}, session: valid_session
+        delete :destroy, params: {table_id: table_id, id: fork.to_param}, session: valid_session
       }.to change(Fork, :count).by(-1)
     end
 
     it "redirects to the forks list" do
       fork = Fork.create! valid_attributes
       delete :destroy, params: {id: fork.to_param}, session: valid_session
-      expect(response).to redirect_to(forks_url)
+      expect(response).to redirect_to(table_forks_url(table_id: table_id))
     end
   end
 

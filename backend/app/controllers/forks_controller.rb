@@ -1,6 +1,30 @@
 class ForksController < ApplicationController
-  before_action :set_fork, only: [:show, :edit, :update, :destroy]
-  before_action :set_table, only: [:index, :new, :edit]
+  class ForkError < StandardError; end
+  class TryAskingYourNeighbor < ForkError; end
+  before_action :set_fork, only: [
+    :show, :edit, :update, :destroy,
+    :pick_up,
+  ]
+  before_action :set_table, only: [:index, :new, :edit, :destroy]
+
+  before_action :get_client_info, only: [
+    :pick_up,
+  ]
+
+  include ClientInfoConcern
+
+  def pick_up
+    @fork.with_lock do
+      if @fork.owner_ip.blank?
+        @fork.owner_ip = my_client_ip
+        @fork.save!
+      else
+        unless @fork.owner_ip == my_client_ip
+          raise ForksController::TryAskingYourNeighbor
+        end
+      end
+    end
+  end
 
   # GET /forks
   # GET /forks.json
@@ -57,7 +81,7 @@ class ForksController < ApplicationController
   def destroy
     @fork.destroy
     respond_to do |format|
-      format.html { redirect_to forks_url, notice: 'Fork was successfully destroyed.' }
+      format.html { redirect_to table_forks_url(table_id: @table.id), notice: 'Fork was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
