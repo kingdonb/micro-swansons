@@ -44,6 +44,16 @@ class Table < ApplicationRecord
     end
   end
 
+  def clear_table!
+    with_lock do
+      num_seats_to_return = forks.count
+      self.clients = []
+      self.seats = seats + num_seats_to_return
+      forks.destroy_all
+      save!
+    end
+  end
+
   def what_fork_is_left_of(client_ip:)
     find_fork_to_left_of(client_ip: client_ip)
   end

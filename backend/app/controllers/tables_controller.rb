@@ -39,7 +39,7 @@ class TablesController < ApplicationController
     if my_client_ip == w_ip
       @table.clear_table!
     else
-      raise NotAuthorizedAsWaiter, "The waiter is at '#{w_ip}', you are not the waiter."
+      raise Table::NotAuthorizedAsWaiter, "The waiter is at '#{w_ip}', you are not the waiter."
     end
   end
 
