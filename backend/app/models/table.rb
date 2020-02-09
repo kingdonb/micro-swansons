@@ -16,21 +16,39 @@ class Table < ApplicationRecord
   has_many :forks, dependent: :destroy
 
   def eat!(client_ip:)
-    unless client_has_both_forks?(client_ip: client_ip)
-      Rails.logger.warn("Table::ErrEatingWithoutBothForks: #{client_ip} tried to eat, but didn't have two forks at #{table_deco}.")
-      raise Table::ErrEatingWithoutBothForks
-    else
-      Rails.logger.info("Client at: #{client_ip} is eating at #{table_deco}.")
+    with_lock do
+      unless client_has_both_forks?(client_ip: client_ip)
+        Rails.logger.warn("Table::ErrEatingWithoutBothForks: #{client_ip} tried to eat, but didn't have two forks at #{table_deco}.")
+        raise Table::ErrEatingWithoutBothForks
+      else
+        Rails.logger.info("Client at: #{client_ip} is eating at #{table_deco}.")
+      end
+
+      self
+    end
+  end
+
+  def be_seated!(client_ip:)
+    with_lock do
+      decrement_seats!(client_ip: client_ip)
+      position = clients.count
+      f = forks.find_by(position: position)
+      unless f.present?
+        f = forks.build
+        f.position = position
+        f.clean = false
+        f.save!
+      end
+
+      self
     end
   end
 
   def has_fork?(client_ip:, fork:)
-    with_lock do
-      if fork.owner_ip == client_ip
-        true
-      else
-        false
-      end
+    if fork.owner_ip == client_ip
+      true
+    else
+      false
     end
   end
 
@@ -41,16 +59,15 @@ class Table < ApplicationRecord
     unless left_fork.present? && right_fork.present?
       raise Table::ErrMissingForkOnTable
     else
-      with_lock do
-        if has_fork?(client_ip: client_ip, fork: left_fork) &&
-            has_fork?(client_ip: client_ip, fork: right_fork)
-          Rails.logger.info("Client at: #{client_ip} observed with two forks at #{table_deco}.")
-          true
-        else
-          false
-        end
+      if has_fork?(client_ip: client_ip, fork: left_fork) &&
+          has_fork?(client_ip: client_ip, fork: right_fork)
+        Rails.logger.info("Client at: #{client_ip} observed with two forks at #{table_deco}.")
+        true
+      else
+        false
       end
     end
+
   rescue Table::ErrWaitForEveryone => e
     Rails.logger.
       warn("Table::ErrWaitForEveryone: Client at: #{client_ip} can't have his "\
@@ -84,13 +101,11 @@ class Table < ApplicationRecord
   end
 
   def find_fork_to_right_of(client_ip:)
-    with_lock do
-      if seats == 0
-        num_seats = clients.length
-        position_to_my_right(client_ip: client_ip)
-      else
-        raise ErrWaitForEveryone
-      end
+    if seats == 0
+      num_seats = clients.length
+      position_to_my_right(client_ip: client_ip)
+    else
+      raise ErrWaitForEveryone
     end
   end
 

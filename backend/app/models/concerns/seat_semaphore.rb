@@ -3,18 +3,16 @@ module SeatSemaphore
   include TableDecorator
 
   def decrement_seats!(client_ip:)
-    if seats > 0
-      with_lock do
-        unless clients.include? client_ip
-          self.seats = seats - 1
-          self.clients << client_ip
-          save!
-        else
-          raise Table::AlreadySeated
-        end
+    unless clients.include? client_ip
+      if seats > 0
+        self.seats = seats - 1
+        self.clients << client_ip
+        save!
+      else
+        raise Table::NoSeatsLeft
       end
     else
-      raise Table::NoSeatsLeft
+      raise Table::AlreadySeated
     end
 
   rescue Table::NoSeatsLeft => e

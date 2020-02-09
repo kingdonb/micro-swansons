@@ -13,7 +13,7 @@ class TablesController < ApplicationController
   include ClientInfoConcern
 
   def sit
-    @table.decrement_seats!(client_ip: my_client_ip)
+    @table.be_seated!(client_ip: my_client_ip)
   end
 
   def my_left_fork
