@@ -1,0 +1,36 @@
+ARG RVM_RUBY_VERSIONS="2.7.0"
+FROM kingdonb/docker-rvm
+LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
+ENV APPDIR="/home/${RVM_USER}/microswansons-backend"
+
+# install manpages and a little vim because I might need them
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  manpages vim-tiny && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# set the time zone
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  tzdata libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN echo "America/New_York" > /etc/timezone
+RUN unlink /etc/localtime
+RUN dpkg-reconfigure -f noninteractive tzdata
+
+RUN mkdir ${APPDIR}
+WORKDIR ${APPDIR}
+
+RUN chown ${RVM_USER} ${APPDIR}
+USER ${RVM_USER}
+ENV RUBY=2.7.0
+
+# include the ruby-version and Gemfile for bundle install
+ADD Gemfile Gemfile.lock .ruby-version ${APPDIR}/
+RUN  bash --login -c 'bundle install'
+
+# include the app source code
+ADD backend/   ${APPDIR}
+USER root
+RUN chown -R ${RVM_USER} ${APPDIR}
+USER ${RVM_USER}
+# web.rb for default health checking on Proctype "cmd"
+CMD  bash --login -c 'bundle exec rails server'
+EXPOSE 3000
