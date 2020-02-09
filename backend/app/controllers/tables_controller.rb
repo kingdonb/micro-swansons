@@ -13,13 +13,36 @@ class TablesController < ApplicationController
   include ClientInfoConcern
 
   def sit
-    @table.decrement_seats!(client_ip: @client_info[:remote_ip])
+    @table.decrement_seats!(client_ip: my_client_ip)
   end
 
   def my_left_fork
+    @table.what_fork_is_left_of(client_ip: my_client_ip)
   end
 
   def my_right_fork
+    @table.what_fork_is_right_of(client_ip: my_client_ip)
+  end
+
+  def left_neighbor
+    @table.who_is_left_of(client_ip: my_client_ip)
+  end
+
+  def right_neighbor
+    @table.who_is_right_of(client_ip: my_client_ip)
+  end
+
+  def clear
+    w_ip = waiter_ip
+    if my_client_ip == w_ip
+      @table.clear_table!
+    else
+      raise NotAuthorizedAsWaiter, "The waiter is at '#{w_ip}', you are not the waiter."
+    end
+  end
+
+  def eat
+    @table.eat!(client_ip: my_client_ip)
   end
 
   # GET /tables
