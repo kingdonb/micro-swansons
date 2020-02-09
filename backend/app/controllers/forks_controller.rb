@@ -1,6 +1,6 @@
 class ForksController < ApplicationController
   before_action :set_fork, only: [:show, :edit, :update, :destroy]
-  before_action :set_table, only: [:index, :new, :edit]
+  before_action :set_table, only: [:index, :new, :edit, :destroy]
 
   # GET /forks
   # GET /forks.json
@@ -57,7 +57,7 @@ class ForksController < ApplicationController
   def destroy
     @fork.destroy
     respond_to do |format|
-      format.html { redirect_to forks_url, notice: 'Fork was successfully destroyed.' }
+      format.html { redirect_to table_forks_url(table_id: @table.id), notice: 'Fork was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
