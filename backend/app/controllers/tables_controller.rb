@@ -4,8 +4,22 @@ class TablesController < ApplicationController
     :sit,
   ]
 
+  before_action :get_client_info, only: [
+    :sit, :eat, :clear,
+    :my_left_fork, :my_right_fork,
+    :left_neighbor, :right_neighbor,
+  ]
+
+  include ClientInfoConcern
+
   def sit
     @table.decrement_seats!
+  end
+
+  def my_left_fork
+  end
+
+  def my_right_fork
   end
 
   # GET /tables
