@@ -41,7 +41,11 @@ RSpec.describe ForksController, type: :controller do
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      position: 0,
+      clean: false,
+      table_id: table.id,
+    }
   }
 
   let(:table_id) { table.id }
@@ -98,7 +102,7 @@ RSpec.describe ForksController, type: :controller do
 
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {fork: invalid_attributes}, session: valid_session
+        post :create, params: {table_id: table_id, fork: invalid_attributes}, session: valid_session
         expect(response).to be_successful
       end
     end
@@ -107,14 +111,19 @@ RSpec.describe ForksController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          position: 1,
+          clean: true,
+          table_id: table.id,
+        }
       }
 
       it "updates the requested fork" do
         fork = Fork.create! valid_attributes
+        expect(fork.clean?).to eq false
         put :update, params: {id: fork.to_param, fork: new_attributes}, session: valid_session
         fork.reload
-        skip("Add assertions for updated state")
+        expect(fork.clean?).to eq true
       end
 
       it "redirects to the fork" do
