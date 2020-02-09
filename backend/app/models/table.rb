@@ -1,7 +1,7 @@
 class Table < ApplicationRecord
   class TableError < StandardError; end
   class NoSeatsLeft < TableError; end
-  has_many :forks
+  has_many :forks, dependent: :destroy
 
   def decrement_seats!
     if seats > 0
