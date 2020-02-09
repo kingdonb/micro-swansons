@@ -24,6 +24,16 @@ class Table < ApplicationRecord
     end
   end
 
+  def has_fork?(client_ip:, fork:)
+    with_lock do
+      if fork.owner_ip == client_ip
+        true
+      else
+        false
+      end
+    end
+  end
+
   def client_has_both_forks?(client_ip:)
     left_fork = find_fork_to_left_of(client_ip: client_ip)
     right_fork = find_fork_to_right_of(client_ip: client_ip)
