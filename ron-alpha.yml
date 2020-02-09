@@ -8,3 +8,8 @@ functions:
     handler: ./ron-alpha
     image: kingdonb/ron-alpha:latest
 
+  ron-tick:
+    lang: go
+    handler: ./ron-tick
+    image: kingdonb/ron-tick:latest
+
