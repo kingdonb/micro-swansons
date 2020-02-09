@@ -5,7 +5,7 @@ class Table < ApplicationRecord
 
   def decrement_seats!
     if seats > 0
-      self.transaction do
+      with_lock do
         self.seats = seats - 1
         # Waiter TODO: record the IP address of the Ron who just sat down,
         # and ensure that he receives a dirty fork with his number on it
