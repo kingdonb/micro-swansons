@@ -32,5 +32,5 @@ USER root
 RUN chown -R ${RVM_USER} ${APPDIR}
 USER ${RVM_USER}
 # web.rb for default health checking on Proctype "cmd"
-CMD  bash --login -c 'bundle exec rails server'
+CMD  bash --login -c 'bundle exec rails server -b 0.0.0.0'
 EXPOSE 3000
