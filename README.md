@@ -5,6 +5,7 @@
 
 To get started, run:
 
+* `make` - this will build the image, `kingdonb/microswansons-backend:latest`
 * `docker-compose up`
 * `docker exec -it tables-backend bash --login -c 'rails db:setup'`
 * `docker exec -it tables-backend bash --login -c 'rails console'`
