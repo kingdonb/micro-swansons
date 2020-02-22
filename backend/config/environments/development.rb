@@ -1,7 +1,8 @@
 Rails.application.configure do
   config.web_console.whitelisted_ips = '172.16.0.0/12'
-  BetterErrors::Middleware.allow_ip! IPAddr.new('172.16.0.0/12', Socket::AF_INET)
+  # BetterErrors::Middleware.allow_ip! IPAddr.new('172.16.0.0/12', Socket::AF_INET)
   # BetterErrors::Middleware.allow_ip! '172.19.0.1'
+  BetterErrors::Middleware.allow_ip! '172.16.0.0/12'
 
   # Settings specified here will take precedence over those in config/application.rb.
 
