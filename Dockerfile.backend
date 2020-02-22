@@ -1,0 +1,17 @@
+FROM kingdonb/docker-rvm-support:20200220
+LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
+ENV RUBY=2.7.0
+
+# include the ruby-version and Gemfile for bundle install
+ADD Gemfile Gemfile.lock .ruby-version ${APPDIR}/
+RUN  bash --login -c 'bundle install'
+
+# include the app source code
+ADD backend/   ${APPDIR}
+USER root
+# TODO: lock down permissions (somehow better than this for production)
+RUN chown -R ${RVM_USER} ${APPDIR}
+USER ${RVM_USER}
+
+CMD  bash --login -c 'bundle exec rails server -b 0.0.0.0'
+EXPOSE 3000
